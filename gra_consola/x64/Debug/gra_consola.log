@@ -1,0 +1,4 @@
+﻿  gra.cpp
+F:\studia\JPRO\gra_consola\gra_consola\gra_consola\gra.cpp(411,16): warning C4101: "EQ_order": lokalna zmienna, do której nie istnieje odwołanie
+F:\studia\JPRO\gra_consola\gra_consola\gra_consola\gra.cpp(409,16): warning C4101: "EQ": lokalna zmienna, do której nie istnieje odwołanie
+  gra_consola.vcxproj -> F:\studia\JPRO\gra_consola\gra_consola\x64\Debug\gra_consola.exe
