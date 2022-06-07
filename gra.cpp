@@ -1,7 +1,8 @@
-// Gra_JPRO Hubert Klim.cpp : Ten plik zawiera funkcjÍ Ñmainî. W nim rozpoczyna siÍ i koÒczy wykonywanie programu.
+Ôªø// Gra_JPRO Hubert Klim.cpp : Ten plik zawiera funkcj√™ ‚Äûmain‚Äù. W nim rozpoczyna si√™ i ko√±czy wykonywanie programu.
 //
 
-#include <windows.h>
+#include <Windows.h>
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -12,6 +13,7 @@
 #include <math.h>
 #include <time.h>
 #include <WinUser.h>
+#include<dos.h>
 using namespace std;
 
 #define INDEX
@@ -49,10 +51,10 @@ enum direction {
 enum colision_element {
     wall = 35,
     e = 101,
-    p1 = 60,
-    p2 = 62,
-    p3 = 94,
-    p4 = 118
+    //p1 = 60,
+    //p2 = 62,
+    //p3 = 94,
+    //p4 = 118
 };
 
 enum entity_type {
@@ -127,7 +129,7 @@ bohater* getEnemy(int list_size, bohater* list[], int posX, int posY) {
 //checks if map element entity wants to walk to is
 // of type colision_element
 int doesColide(char elem) {
-    for (int i = wall; i <= p4; i++) {
+    for (int i = wall; i <= e; i++) {
         if (i == elem) {
             return 1;
         }
@@ -244,7 +246,7 @@ void create_map(int width, int height, char** mapa) {
 
     err = fopen_s(&map_file, "./mapa.txt", "r");
     if (err != 0) {
-        cout << "Coú nie dziala";
+        cout << "Co≈ì nie dziala";
     }
     else {
         while (!feof(map_file)) {
@@ -296,10 +298,10 @@ void item_spawn(przedmiot& tworzony_przedmiot) {
 }
 
 void insert_EQ(przedmiot* inventory[][10], int env[][10], przedmiot* inventory_order[100], przedmiot* item) {
-    //dodanie wskaünika do listy EQ 
+    //dodanie wska≈∏nika do listy EQ 
     inventory[0][0] = item;
 
-    //Wype≥nienie listy "equipment" id przedmiotu
+    //Wype¬≥nienie listy "equipment" id przedmiotu
     for (int i = 0; i < item->height; i++) {
         for (int j = 0; j < item->width; j++) {
             env[i][j] = item->id;
@@ -315,20 +317,20 @@ void SetCursorPosition(int XPos, int YPos) {
 }
 
 void character_move(bohater*& character, bohater*& player) {
-    if(character->type != entity_type::player) {
-        if ((character->coord_x > player->coord_x)&& (!doesColide(mapa[character->coord_y][character->coord_x - 1]))) {
+    if (character->type != entity_type::player) {
+        if ((character->coord_x > player->coord_x) && (!doesColide(mapa[character->coord_y][character->coord_x - 1]))) {
             character->direction = direction::left;
-         }
-         else if( (character->coord_x < player->coord_x) && !doesColide(mapa[character->coord_y][character->coord_x + 1])) {
+        }
+        else if ((character->coord_x < player->coord_x) && !doesColide(mapa[character->coord_y][character->coord_x + 1])) {
             character->direction = direction::right;
         }
-        else if (character->coord_y < player->coord_y)  {
+        else if (character->coord_y < player->coord_y) {
             character->direction = direction::down;
-         }
+        }
         else if (character->coord_y > player->coord_y) {
             character->direction = direction::up;
+        }
     }
-}
     switch (character->direction) {
     case direction::right:
         if (!doesColide(mapa[character->coord_y][character->coord_x + 1])) {
@@ -408,14 +410,14 @@ int main()
 {
 
 
-    // ----- OTWIERANIE PLIKU Z MAP• -----
+    // ----- OTWIERANIE PLIKU Z MAP¬• -----
     //rozmiar
     int w = 22;
     int k = 11;
 
     int max_spawners = 5;
 
-    spawner_list = (spawner*)malloc(max_spawners* sizeof(spawner));
+    spawner_list = (spawner*)malloc(max_spawners * sizeof(spawner));
 
     mapa = (char**)malloc(w * sizeof(char*));
     for (int i = 0; i < w; i++) {
@@ -428,7 +430,7 @@ int main()
     }
     create_map(w, k, mapa);
     create_map(w, k, origin_map);
-    
+
     ENEMY_COUNT = ENEMY_COUNT / 2;
     SPAWNER_COUNT = SPAWNER_COUNT / 2;
     // ----- EQUIPMENT -----
@@ -471,10 +473,10 @@ int main()
     while (game_loop) {
 
         SetCursorPosition(0, 0);
-        clrscr();
+        //clrscr();
 
 
-        // i -> rzÍdy j -> kolumny
+        // i -> rz√™dy j -> kolumny
         for (int i = 0; i < k - 1; i++) {
             for (int j = 0; j < w - 2; j++) {
 
@@ -557,27 +559,28 @@ int main()
 
         }
 
-//?        if (GetKeyState('A') & 0x8000/*Check if high-order bit is set (1 << 15)*/)
-  
-      //{
-            //printf("A");
-        //}
+        //?        if (GetKeyState('A') & 0x8000/*Check if high-order bit is set (1 << 15)*/)
+
+              //{
+                    //printf("A");
+                //}
 
 
-        //--------- READING KEY INPUT ---------
-        /*
-            Jeúli gracz wciúnie spacje uruchamia siÍ funkcja fight_enemy()
-                jeúli na mapie na przeciwko gracza (w kierunku w ktÛrym patrzy)
-                znajdujÍ sie znak "e"
-                funkcja iterujÍ przez listÍ przeciwnikÛw
-                    gdy natrafi na przeciwnika ktÛrego po≥oøenie pasujÍ do
-                    miejsca przed graczem otrzymujemy wskaünik do struktury
-                    przeciwnika
-                majπc strukture przeciwnika uøywajπc referencji zadajemy mu
-                obraøenia oraz sami je otrzymujemy
-        */
-        pressed_key = _getch();
-        if (nowy_bohater->HP > 0) {
+                //--------- READING KEY INPUT ---------
+                /*
+                    Je≈ìli gracz wci≈ìnie spacje uruchamia si√™ funkcja fight_enemy()
+                        je≈ìli na mapie na przeciwko gracza (w kierunku w kt√≥rym patrzy)
+                        znajduj√™ sie znak "e"
+                        funkcja iteruj√™ przez list√™ przeciwnik√≥w
+                            gdy natrafi na przeciwnika kt√≥rego po¬≥o¬øenie pasuj√™ do
+                            miejsca przed graczem otrzymujemy wska≈∏nik do struktury
+                            przeciwnika
+                        maj¬πc strukture przeciwnika u¬øywaj¬πc referencji zadajemy mu
+                        obra¬øenia oraz sami je otrzymujemy
+                */
+        Sleep(300);
+        //pressed_key = _getch();
+       /* if (nowy_bohater->HP > 0) {
             switch (pressed_key) {
             case 'w':
                 nowy_bohater->direction = direction::up;
@@ -610,17 +613,37 @@ int main()
         }
         else {
             game_loop = 0;
+        }*/
+        if (GetKeyState('A') < 0/*Check if high-order bit is set (1 << 15)*/)
+        {
+            nowy_bohater->direction = direction::left;
+            nowy_bohater->move(nowy_bohater, nowy_bohater);
+            printf("A");
         }
-    }
+        if (GetKeyState('D') & 0x8000/*Check if high-order bit is set (1 << 15)*/)
+        {
+            nowy_bohater->direction = direction::right;
+            nowy_bohater->move(nowy_bohater, nowy_bohater);
+            printf("d");
+        }
+        if (GetKeyState('W') & 0x8000/*Check if high-order bit is set (1 << 15)*/)
+        {
+            nowy_bohater->direction = direction::up;
+            nowy_bohater->move(nowy_bohater, nowy_bohater);
+            printf("w");
+        }
+        if (GetKeyState('S') & 0x8000/*Check if high-order bit is set (1 << 15)*/)
+        {
+            nowy_bohater->direction = direction::down;
+            nowy_bohater->move(nowy_bohater, nowy_bohater);
+            printf("s");
+        }
 
-    //if (GetKeyState('a') & 0x8000/*Check if high-order bit is set (1 << 15)*/)
-    //{
-    //    nowy_bohater->direction = direction::left;
-    //    nowy_bohater->move(nowy_bohater, nowy_bohater);
-    //    printf("A");
-    //}
 
 
+  }
+
+  
 
     // ----- DEALOKACJA PAMIECI -----
     for (int i = 0; i < w; i++) {
